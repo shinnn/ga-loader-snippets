@@ -49,9 +49,9 @@ bower install ga-loader-snippets
 var gaLoaderSnippets = require('shinnn/ga-loader-snippets');
 ```
 
-## API
+### API
 
-### gaLoaderSnippets
+#### gaLoaderSnippets
 
 Type: `Object`
 
@@ -77,7 +77,7 @@ gaLoaderSnippets.with7params;
 
 ## Acknowledgement
 
-I used [Mathias Bynens's blog post about Google Analytics snippet](https://mathiasbynens.be/notes/async-analytics-snippet) and [his commit](https://github.com/h5bp/html5-boilerplate/commit/48d49e96d6db282eb9686d31ebbc5cbbbdd4d966) on [HTML5 boilerplate](https://github.com/h5bp/html5-boilerplate). Thanks, [mathiasbynens](https://github.com/mathiasbynens).
+I used [Mathias Bynens's blog post about Google Analytics snippet](https://mathiasbynens.be/notes/async-analytics-snippet) and [his commit](https://github.com/h5bp/html5-boilerplate/commit/48d49e96d6db282eb9686d31ebbc5cbbbdd4d966) on [HTML5 boilerplate](https://github.com/h5bp/html5-boilerplate) as reference. Thanks, [mathiasbynens](https://github.com/mathiasbynens).
 
 ## Licenses
 
