@@ -11,6 +11,7 @@ var readGlob = require('read-glob-promise');
 var rimraf = require('rimraf');
 var stylish = require('jshint-stylish');
 var toCamelCase = require('to-camel-case');
+var toSingleQuotes = require('to-single-quotes');
 
 var bower = require('./bower.json');
 var pkg = require('./package.json');
@@ -26,8 +27,16 @@ var banner = [
   '*/\n'
 ].join('\n');
 
-var commonPart = '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\\n' +
-                 '(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date';
+var parts = [
+  '!function(A,B,C',
+  '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\n' +
+  '(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date',
+  '=B.createElement(',
+  '"//www.google-analytics.com/analytics.js"',
+  '.parentNode.insertBefore(',
+  '=B.getElementsByTagName(D)[0],',
+  '(window,document,"ga"'
+];
 
 var productionDir = 'snippets-production';
 var casperjsPath = 'node_modules/.bin/casperjs';
@@ -60,26 +69,27 @@ gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
 gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
   readGlob(productionDir + '/*.js', 'utf8').then(function(contents) {
     var snippets = contents.map(function(content) {
-      return content
-        .replace(/\n/g, '\\n')
-        .replace(commonPart, '\' + commonPart + \'');
+      parts.forEach(function(part, index) {
+        content = content.replace(part, '\' + parts[' + index + '] + \'');
+      });
+
+      return content.replace(' + \'\' + ', ' + ').replace(/\n/g, '\\n');
     });
+
+    var templateOptions = {
+      parts: toSingleQuotes(JSON.stringify(parts, null, '  ')),
+      snippets: snippets
+    };
 
     mergeStream(
       gulp.src('template.js')
-        .pipe($.template({
-          commonPart: commonPart,
-          snippets: snippets
-        }))
+        .pipe($.template(templateOptions))
         .pipe($.header(banner + '!function() {\n', {pkg: pkg}))
         .pipe($.footer('\nwindow.' + varName + ' = ' + varName + ';\n}();\n'))
         .pipe($.rename(bower.main))
         .pipe(gulp.dest('')),
       gulp.src('template.js')
-        .pipe($.template({
-          commonPart: commonPart,
-          snippets: snippets
-        }))
+        .pipe($.template(templateOptions))
         .pipe($.header(banner, {pkg: pkg}))
         .pipe($.footer('\nmodule.exports = ' + varName + ';\n'))
         .pipe($.rename(pkg.main))

@@ -60,6 +60,7 @@
     "rimraf": "^2.2.8",
     "tape": "^3.0.3",
     "tiny-npm-license": "^1.0.0",
-    "to-camel-case": "^0.2.1"
+    "to-camel-case": "^0.2.1",
+    "to-single-quotes": "^1.0.1"
   }
 }

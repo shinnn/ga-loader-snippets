@@ -6,14 +6,22 @@
  * https://github.com/shinnn/ga-loader-snippets
 */
 !function() {
-var commonPart = '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\n(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date';
+var parts = [
+  '!function(A,B,C',
+  '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\n(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date',
+  '=B.createElement(',
+  '"//www.google-analytics.com/analytics.js"',
+  '.parentNode.insertBefore(',
+  '=B.getElementsByTagName(D)[0],',
+  '(window,document,"ga"'
+];
 
 var gaLoaderSnippets = {
-  with3params: '!function(A,B,C' + commonPart + ';var s=B.createElement("script"),\ne=B.scripts[0];s.src="//www.google-analytics.com/analytics.js",\ne.parentNode.insertBefore(s,e)}(window,document,"ga");',
-  with4params: '!function(A,B,C,D' + commonPart + ',D=B.createElement("script");\nvar e=B.scripts[0];D.src="//www.google-analytics.com/analytics.js",\ne.parentNode.insertBefore(D,e)}(window,document,"ga");',
-  with5params: '!function(A,B,C,D,E' + commonPart + ',D=B.createElement("script"),\nE=B.scripts[0],D.src="//www.google-analytics.com/analytics.js",\nE.parentNode.insertBefore(D,E)}(window,document,"ga");',
-  with6params: '!function(A,B,C,D,E,F' + commonPart + ',E=B.createElement(D),\nF=B.getElementsByTagName(D)[0],E.src="//www.google-analytics.com/analytics.js",\nF.parentNode.insertBefore(E,F)}(window,document,"ga","script");',
-  with7params: '!function(A,B,C,D,E,F,G' + commonPart + ',F=B.createElement(D),\nG=B.getElementsByTagName(D)[0],F.src=E,G.parentNode.insertBefore(F,G)}\n(window,document,"ga","script","//www.google-analytics.com/analytics.js");'
+  with3params: '' + parts[0] + parts[1] + ';var s' + parts[2] + '"script"),\ne=B.scripts[0];s.src=' + parts[3] + ',\ne' + parts[4] + 's,e)}' + parts[6] + ');',
+  with4params: '' + parts[0] + ',D' + parts[1] + ',D' + parts[2] + '"script");\nvar e=B.scripts[0];D.src=' + parts[3] + ',\ne' + parts[4] + 'D,e)}' + parts[6] + ');',
+  with5params: '' + parts[0] + ',D,E' + parts[1] + ',D' + parts[2] + '"script"),\nE=B.scripts[0],D.src=' + parts[3] + ',\nE' + parts[4] + 'D,E)}' + parts[6] + ');',
+  with6params: '' + parts[0] + ',D,E,F' + parts[1] + ',E' + parts[2] + 'D),\nF' + parts[5] + 'E.src=' + parts[3] + ',\nF' + parts[4] + 'E,F)}' + parts[6] + ',"script");',
+  with7params: '' + parts[0] + ',D,E,F,G' + parts[1] + ',F' + parts[2] + 'D),\nG' + parts[5] + 'F.src=E,G' + parts[4] + 'F,G)}\n' + parts[6] + ',"script",' + parts[3] + ');'
 };
 
 window.gaLoaderSnippets = gaLoaderSnippets;
