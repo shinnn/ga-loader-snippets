@@ -73,7 +73,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
         content = content.replace(part, '\' + parts[' + index + '] + \'');
       });
 
-      return content.replace(' + \'\' + ', ' + ').replace(/\n/g, '\\n');
+      return ('\'' + content + '\'').replace(/(^'|'') \+ /g, '').replace(/\n/g, '\\n');
     });
 
     var templateOptions = {
