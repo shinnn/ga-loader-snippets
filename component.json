@@ -1,0 +1,26 @@
+{
+  "name": "ga-loader-snippets",
+  "version": "1.0.0",
+  "repository": "shinnn/ga-loader-snippets",
+  "description": "A collection of Google Analytics loader scripts with various number of parameters",
+  "keywords": [
+    "ga",
+    "google",
+    "analytics",
+    "google analytics",
+    "universal analytics",
+    "snippet",
+    "parameter",
+    "source",
+    "code",
+    "script"
+  ],
+  "main": "scripts/ga-loader-snippets-cjs.js",
+  "scripts": [
+    "scripts/ga-loader-snippets-cjs.js"
+  ],
+  "files": [
+    "LICENSES.md"
+  ],
+  "license": "MIT"
+}

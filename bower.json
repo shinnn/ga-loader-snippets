@@ -1,0 +1,41 @@
+{
+  "name": "ga-loader-snippets",
+  "description": "A collection of Google Analytics loader scripts with various number of parameters",
+  "keywords": [
+    "ga",
+    "google",
+    "analytics",
+    "google analytics",
+    "universal analytics",
+    "snippet",
+    "parameter",
+    "source",
+    "code",
+    "script"
+  ],
+  "main": "scripts/ga-loader-snippets.js",
+  "homepage": "https://github.com/shinnn/ga-loader-snippets",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shinnn/ga-loader-snippets.git"
+  },
+  "authors": [
+    {
+      "name": "Shinnosuke Watanabe",
+      "url": "https://github.com/shinnn"
+    }
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "src",
+    "scripts/ga-loader-snippets-cjs.js",
+    "snippets-development",
+    "snippets-producion",
+    "test.js",
+    "gulpfile.js",
+    "package.json",
+    "component.json"
+  ]
+}
