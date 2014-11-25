@@ -11,7 +11,7 @@ var readGlob = require('read-glob-promise');
 var rimraf = require('rimraf');
 var stylish = require('jshint-stylish');
 var toCamelCase = require('to-camel-case');
-var toSingleQuotes = require('to-single-quotes');
+var stringifyObject = require('stringify-object');
 
 var bower = require('./bower.json');
 var pkg = require('./package.json');
@@ -29,7 +29,7 @@ var banner = [
 
 var parts = [
   '!function(A,B,C',
-  '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\n' +
+  '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\\n' +
   '(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date',
   '=B.createElement(',
   '"//www.google-analytics.com/analytics.js"',
@@ -69,15 +69,17 @@ gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
 gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
   readGlob(productionDir + '/*.js', 'utf8').then(function(contents) {
     var snippets = contents.map(function(content) {
-      parts.forEach(function(part, index) {
-        content = content.replace(part, '\' + parts[' + index + '] + \'');
+      content = content.replace(/\n/g, '\\n');
+
+      parts.forEach(function(part, idx) {
+        content = content.replace(part, '\' + parts[' + idx + '] + \'');
       });
 
-      return ('\'' + content + '\'').replace(/(^'|'') \+ /g, '').replace(/\n/g, '\\n');
+      return ('\'' + content + '\'').replace(/(^'|'') \+ /g, '');
     });
 
     var templateOptions = {
-      parts: toSingleQuotes(JSON.stringify(parts, null, '  ')),
+      parts: stringifyObject(parts, {indent: '  '}),
       snippets: snippets
     };
 
