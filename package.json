@@ -1,8 +1,8 @@
 {
   "name": "ga-loader-snippets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A collection of Google Analytics loader scripts with various number of parameters",
-  "main": "./scripts/ga-loader-snippets-cjs.js",
+  "main": "scripts/ga-loader-snippets-cjs.js",
   "files": [
     "scripts/ga-loader-snippets-cjs.js",
     "LICENSES.md"
