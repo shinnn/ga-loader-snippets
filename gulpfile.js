@@ -81,6 +81,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
         wrap: false
       }))
       .pipe($.rename(pkg.main))
+      .pipe($.jscs({maximumLineLength: 170}))
       .pipe(gulp.dest(''));
 
     var browser = gulp.src('template.js')
@@ -90,6 +91,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
         wrap: true
       }))
       .pipe($.rename(bower.main))
+      .pipe($.jscs({maximumLineLength: 170}))
       .pipe(gulp.dest(''));
 
     mergeStream(commonJs, browser).on('end', cb);
