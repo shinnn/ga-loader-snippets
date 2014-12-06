@@ -5,10 +5,13 @@
  * ga-loader-snippets | MIT (c) Shinnosuke Watanabe
  * https://github.com/shinnn/ga-loader-snippets
 */
-<% if (exportsWindow) { %>!function() {<% } %>
+<% if (wrap) { %>!function() {
+<% } %>
 var parts = ${parts};
 
-<% if (exportsWindow) { %>window.gaLoaderSnippets<% } else { %>module.exports<% } %> = {
+<% if (wrap) { %>window.gaLoaderSnippets<% } else { %>module.exports<% } %> = {
   <% snippets.forEach(function(snippet, index) { %>with${index + 3}params: ${snippet}<% if (index !== snippets.length - 1) { %>,
   <% } %><% }); %>
-};<% if (exportsWindow) { %>}();<% } %>
+};<% if (wrap) { %>
+
+}();<% } %>

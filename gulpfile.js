@@ -66,7 +66,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
   readGlob(productionDir + '/*.js', 'utf8').then(function(contents) {
     var snippets = contents.map(function(content) {
       content = parts.reduce(function(result, part, idx) {
-        return result.replace(part, '\' + parts[' + idx + '] + \'');
+        return result.replace(part.replace(/\\n/g, '\n'), '\' + parts[' + idx + '] + \'');
       }, content).replace(/\n/g, '\\n');
 
       return ('\'' + content + '\'').replace(/(^'|'') \+ /g, '');
@@ -78,7 +78,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
       .pipe($.template({
         parts: partsStringified,
         snippets: snippets,
-        exportsWindow: false
+        wrap: false
       }))
       .pipe($.rename(pkg.main))
       .pipe(gulp.dest(''));
@@ -87,7 +87,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
       .pipe($.template({
         parts: partsStringified,
         snippets: snippets,
-        exportsWindow: true
+        wrap: true
       }))
       .pipe($.rename(bower.main))
       .pipe(gulp.dest(''));
