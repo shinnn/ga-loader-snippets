@@ -59,8 +59,12 @@
     "require-bower-files": "^1.0.0",
     "rimraf": "^2.2.8",
     "stringify-object": "^1.0.0",
-    "tape": "^3.0.3",
-    "tiny-npm-license": "^1.0.0",
-    "to-camel-case": "^0.2.1"
+    "tape": "^3.0.3"
+  },
+  "jscsConfig": {
+    "preset": "google",
+    "maximumLineLength": 98,
+    "requireBlocksOnNewline": true,
+    "validateLineBreaks": "LF"
   }
 }

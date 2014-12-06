@@ -36,8 +36,8 @@ gulp.task('lint', function() {
   gulp.src(['{,test/*/}*.js', '!template.js'])
     .pipe($.jshint())
     .pipe($.jshint.reporter(stylish))
-    .pipe($.jscs('.jscs.json'));
     .pipe($.jshint.reporter('fail'))
+    .pipe($.jscs('package.json'));
   gulp.src('*.json')
     .pipe($.jsonlint())
     .pipe($.jsonlint.reporter());
