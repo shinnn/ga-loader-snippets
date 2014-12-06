@@ -18,7 +18,7 @@ A collection of Google Analytics loader scripts with various number of parameter
 | number of parameters | file size (byte) |
 | --- | --- |
 | 3 | 273 |
-| 4 | 272 |
+| 4 | 275 |
 | 5 | 273 |
 | 6 | 293 |
 | 7 | 297 |

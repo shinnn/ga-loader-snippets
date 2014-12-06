@@ -10,31 +10,19 @@ var mergeStream = require('merge-stream');
 var readGlob = require('read-glob-promise');
 var rimraf = require('rimraf');
 var stylish = require('jshint-stylish');
-var toCamelCase = require('to-camel-case');
 var stringifyObject = require('stringify-object');
 
 var bower = require('./bower.json');
 var pkg = require('./package.json');
-var varName = toCamelCase(pkg.name);
-
-var banner = [
-  '/*!',
-  ' * HTML5 Boilerplate | MIT (c) HTML5 Boilerplate',
-  ' * https://github.com/h5bp/html5-boilerplate',
-  ' *',
-  ' * ga-loader-snippets | MIT (c) Shinnosuke Watanabe',
-  ' * https://github.com/shinnn/ga-loader-snippets',
-  '*/\n'
-].join('\n');
 
 var parts = [
   '!function(A,B,C',
-  '){A.GoogleAnalyticsObject=C,A[C]||(A[C]=function(){\\n' +
-  '(A[C].q=A[C].q||[]).push(arguments)}),A[C].l=+new Date',
+  '){A.GoogleAnalyticsObject=C;A[C]||(A[C]=function(){\\n' +
+  '(A[C].q=A[C].q||[]).push(arguments)});A[C].l=+new Date',
   '=B.createElement(',
   '"//www.google-analytics.com/analytics.js"',
   '.parentNode.insertBefore(',
-  '=B.getElementsByTagName(D)[0],',
+  '=B.getElementsByTagName(D)[0];',
   '(window,document,"ga"'
 ];
 
@@ -49,6 +37,7 @@ gulp.task('lint', function() {
     .pipe($.jshint())
     .pipe($.jshint.reporter(stylish))
     .pipe($.jscs('.jscs.json'));
+    .pipe($.jshint.reporter('fail'))
   gulp.src('*.json')
     .pipe($.jsonlint())
     .pipe($.jsonlint.reporter());
@@ -58,10 +47,17 @@ gulp.task('clean:minify', rimraf.bind(null, productionDir));
 
 gulp.task('minify', ['clean:minify'], function() {
   return gulp.src('snippets-development/*.js')
-    .pipe($.uglify({mangle: false}))
-    .pipe($.replace(/\(\){|Element\(.+?\).|js",|\(F,G\)}/g, '$&\n'))
-    .pipe($.rename({suffix: '-production'}))
-    .pipe(gulp.dest(productionDir));
+    .pipe($.uglify({
+      mangle: false,
+      compress: {sequences: false}
+    }))
+    .pipe($.replace(/\(\){|Element\(.+?\).|js";|\(F,G\)}/g, '$&\n'))
+    .pipe($.rename({
+      dirname: productionDir,
+      suffix: '-production'
+    }))
+    .pipe($.size({showFiles: true}))
+    .pipe(gulp.dest(''));
 });
 
 gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
@@ -69,35 +65,35 @@ gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
 gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
   readGlob(productionDir + '/*.js', 'utf8').then(function(contents) {
     var snippets = contents.map(function(content) {
-      content = content.replace(/\n/g, '\\n');
-
-      parts.forEach(function(part, idx) {
-        content = content.replace(part, '\' + parts[' + idx + '] + \'');
-      });
+      content = parts.reduce(function(result, part, idx) {
+        return result.replace(part, '\' + parts[' + idx + '] + \'');
+      }, content).replace(/\n/g, '\\n');
 
       return ('\'' + content + '\'').replace(/(^'|'') \+ /g, '');
     });
 
-    var templateOptions = {
-      parts: stringifyObject(parts, {indent: '  '}),
-      snippets: snippets
-    };
+    var partsStringified = stringifyObject(parts, {indent: '  '});
 
-    mergeStream(
-      gulp.src('template.js')
-        .pipe($.template(templateOptions))
-        .pipe($.header(banner + '!function() {\n', {pkg: pkg}))
-        .pipe($.footer('\nwindow.' + varName + ' = ' + varName + ';\n}();\n'))
-        .pipe($.rename(bower.main))
-        .pipe(gulp.dest('')),
-      gulp.src('template.js')
-        .pipe($.template(templateOptions))
-        .pipe($.header(banner, {pkg: pkg}))
-        .pipe($.footer('\nmodule.exports = ' + varName + ';\n'))
-        .pipe($.rename(pkg.main))
-        .pipe(gulp.dest(''))
-    ).on('end', cb);
-  });
+    var commonJs = gulp.src('template.js')
+      .pipe($.template({
+        parts: partsStringified,
+        snippets: snippets,
+        exportsWindow: false
+      }))
+      .pipe($.rename(pkg.main))
+      .pipe(gulp.dest(''));
+
+    var browser = gulp.src('template.js')
+      .pipe($.template({
+        parts: partsStringified,
+        snippets: snippets,
+        exportsWindow: true
+      }))
+      .pipe($.rename(bower.main))
+      .pipe(gulp.dest(''));
+
+    mergeStream(commonJs, browser).on('end', cb);
+  }, cb);
 });
 
 gulp.task('test', ['build'], function(cb) {
