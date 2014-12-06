@@ -102,12 +102,12 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
 
 gulp.task('test', ['build'], function(cb) {
   eachAsync([
-    'node test/test-node/test.js',
+    'node test/test-api/test',
     casperjsPath + ' test test/test-browser/run-casper.js'
-  ], function(cmd, i, next) {
+  ], function(cmd, index, next) {
     exec(cmd, function(err, stderr, stdout) {
-      console.log(stderr);
-      console.warn(stdout);
+      process.stdout.write(stderr);
+      process.stderr.write(stdout);
       next(err);
     });
   }, cb);
