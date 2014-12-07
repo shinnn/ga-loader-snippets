@@ -46,18 +46,15 @@ gulp.task('lint', function() {
 gulp.task('clean:minify', rimraf.bind(null, productionDir));
 
 gulp.task('minify', ['clean:minify'], function() {
-  return gulp.src('snippets-development/*.js')
+  return gulp.src('*.js', {cwd: 'snippets-development'})
     .pipe($.uglify({
       mangle: false,
       compress: {sequences: false}
     }))
     .pipe($.replace(/\(\){|Element\(.+?\).|js";|\(F,G\)}/g, '$&\n'))
-    .pipe($.rename({
-      dirname: productionDir,
-      suffix: '-production'
-    }))
+    .pipe($.rename({suffix: '-production'}))
     .pipe($.size({showFiles: true}))
-    .pipe(gulp.dest(''));
+    .pipe(gulp.dest(productionDir));
 });
 
 gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
@@ -112,8 +109,8 @@ gulp.task('test', ['build'], function(cb) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['{,src/}*.js'], ['test']);
-  gulp.watch(['*.json', '.jshintrc'], ['lint']);
+  gulp.watch('{,src/}*.js', ['test']);
+  gulp.watch('{*.json,.jshintrc}', ['lint']);
 });
 
 gulp.task('default', ['test', 'watch']);
