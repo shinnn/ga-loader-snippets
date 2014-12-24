@@ -28,14 +28,12 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
+    "*.js",
+    "*.json",
     "node_modules",
-    "src",
     "scripts/ga-loader-snippets-cjs.js",
     "snippets-development",
     "snippets-producion",
-    "test.js",
-    "gulpfile.js",
-    "package.json",
-    "component.json"
+    "src"
   ]
 }
