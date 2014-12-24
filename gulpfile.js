@@ -32,34 +32,40 @@ if (process.platform === 'win32') {
   casperjsPath += '.exe';
 }
 
-gulp.task('lint', function() {
-  gulp.src(['{,test/*/}*.js', '!template.js'])
+gulp.task('lint:scripts', function() {
+  return gulp.src(['{,test/*/}*.js', '!template.js'])
+    .pipe($.jscs(pkg.jscsConfig))
     .pipe($.jshint())
     .pipe($.jshint.reporter(stylish))
-    .pipe($.jshint.reporter('fail'))
-    .pipe($.jscs('package.json'));
-  gulp.src('*.json')
+    .pipe($.jshint.reporter('fail'));
+});
+
+gulp.task('lint:json', function() {
+  return gulp.src('*.json')
     .pipe($.jsonlint())
     .pipe($.jsonlint.reporter());
 });
 
 gulp.task('clean:minify', rimraf.bind(null, productionDir));
 
-gulp.task('minify', ['clean:minify'], function() {
+gulp.task('minify', ['lint:scripts', 'lint:json', 'clean:minify'], function() {
   return gulp.src('*.js', {cwd: 'snippets-development'})
     .pipe($.uglify({
       mangle: false,
       compress: {sequences: false}
     }))
     .pipe($.replace(/\(\){|Element\(.+?\).|js";|\(F,G\)}/g, '$&\n'))
-    .pipe($.rename({suffix: '-production'}))
+    .pipe($.rename({
+      dirname: productionDir,
+      suffix: '-production'
+    }))
     .pipe($.size({showFiles: true}))
-    .pipe(gulp.dest(productionDir));
+    .pipe(gulp.dest(''));
 });
 
 gulp.task('clean:dist', rimraf.bind(null, 'scripts'));
 
-gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
+gulp.task('build', ['clean:dist', 'minify'], function(cb) {
   readGlob(productionDir + '/*.js', 'utf8').then(function(contents) {
     var snippets = contents.map(function(content) {
       content = parts.reduce(function(result, part, idx) {
@@ -77,9 +83,7 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
         snippets: snippets,
         wrap: false
       }))
-      .pipe($.rename(pkg.main))
-      .pipe($.jscs({maximumLineLength: 170}))
-      .pipe(gulp.dest(''));
+      .pipe($.rename(pkg.main));
 
     var browser = gulp.src('template.js')
       .pipe($.template({
@@ -87,12 +91,13 @@ gulp.task('build', ['lint', 'clean:dist', 'minify'], function(cb) {
         snippets: snippets,
         wrap: true
       }))
-      .pipe($.rename(bower.main))
-      .pipe($.jscs({maximumLineLength: 170}))
-      .pipe(gulp.dest(''));
+      .pipe($.rename(bower.main));
 
-    mergeStream(commonJs, browser).on('end', cb);
-  }, cb);
+    mergeStream(commonJs, browser)
+      .pipe($.jscs({maximumLineLength: 170}))
+      .pipe(gulp.dest(''))
+      .on('end', cb);
+  }, cb).catch(cb);
 });
 
 gulp.task('test', ['build'], function(cb) {
