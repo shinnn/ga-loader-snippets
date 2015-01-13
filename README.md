@@ -1,9 +1,9 @@
 # ga-loader-snippets
 
-[![NPM version](https://badge.fury.io/js/ga-loader-snippets.svg)](https://www.npmjs.org/package/ga-loader-snippets)
-[![Bower version](https://badge.fury.io/bo/ga-loader-snippets.svg)](https://github.com/shinnn/ga-loader-snippets/releases)
+[![NPM version](https://img.shields.io/npm/v/ga-loader-snippets.svg?style=flat)](https://www.npmjs.com/package/ga-loader-snippets)
+[![Bower version](https://img.shields.io/bower/v/ga-loader-snippets.svg?style=flat)](https://github.com/shinnn/ga-loader-snippets/releases)
 [![Build Status](https://travis-ci.org/shinnn/ga-loader-snippets.svg?branch=master)](https://travis-ci.org/shinnn/ga-loader-snippets)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/ga-loader-snippets.svg)](https://coveralls.io/r/shinnn/ga-loader-snippets)
+[![Coverage Status](https://img.shields.io/coveralls/shinnn/ga-loader-snippets.svg?style=flat)](https://coveralls.io/r/shinnn/ga-loader-snippets)
 [![devDependency Status](https://david-dm.org/shinnn/ga-loader-snippets/dev-status.svg)](https://david-dm.org/shinnn/ga-loader-snippets#info=devDependencies)
 
 A collection of Google Analytics loader scripts with various number of parameters, used in [isogram](https://github.com/shinnn/isogram)
@@ -31,7 +31,7 @@ A collection of Google Analytics loader scripts with various number of parameter
 
 #### Package managers
 
-##### [npm](https://www.npmjs.org/)
+##### [npm](https://www.npmjs.com/)
 
 ```sh
 npm install ga-loader-snippets
